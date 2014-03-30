@@ -1,0 +1,12 @@
+0:0:0:0:0:0:0:1 - - [30/Mar/2014:16:01:53 +1000] "GET /study/refinement HTTP/1.1" 200 9913 http-bio-8080-exec-1 2654
+0:0:0:0:0:0:0:1 - - [30/Mar/2014:16:01:53 +1000] "GET /study/resources/form.css;jsessionid=B37CD44D0245CF1AB1D68FFDCD5D99F1 HTTP/1.1" 200 1833 http-bio-8080-exec-2 14
+0:0:0:0:0:0:0:1 - - [30/Mar/2014:16:01:53 +1000] "GET /study/resources/messages/messages.css HTTP/1.1" 200 863 http-bio-8080-exec-4 8
+0:0:0:0:0:0:0:1 - - [30/Mar/2014:16:01:53 +1000] "GET /study/resources/jquery/1.10.2/jquery.js;jsessionid=B37CD44D0245CF1AB1D68FFDCD5D99F1 HTTP/1.1" 200 93113 http-bio-8080-exec-3 208
+0:0:0:0:0:0:0:1 - - [30/Mar/2014:16:01:53 +1000] "GET /study/resources/d3.js;jsessionid=B37CD44D0245CF1AB1D68FFDCD5D99F1 HTTP/1.1" 200 1310 http-bio-8080-exec-6 17
+0:0:0:0:0:0:0:1 - - [30/Mar/2014:16:01:53 +1000] "GET /study/resources/form.js;jsessionid=B37CD44D0245CF1AB1D68FFDCD5D99F1 HTTP/1.1" 200 359 http-bio-8080-exec-9 22
+0:0:0:0:0:0:0:1 - - [30/Mar/2014:16:01:53 +1000] "GET /study/resources/diverVis.js;jsessionid=B37CD44D0245CF1AB1D68FFDCD5D99F1 HTTP/1.1" 200 3482 http-bio-8080-exec-7 28
+0:0:0:0:0:0:0:1 - - [30/Mar/2014:16:01:53 +1000] "GET /study/resources/d3/d3.min.js;jsessionid=B37CD44D0245CF1AB1D68FFDCD5D99F1 HTTP/1.1" 200 146632 http-bio-8080-exec-5 118
+0:0:0:0:0:0:0:1 - - [30/Mar/2014:16:01:55 +1000] "GET /study/resources/messages/warning.png HTTP/1.1" 200 4567 http-bio-8080-exec-9 30
+0:0:0:0:0:0:0:1 - - [30/Mar/2014:16:01:55 +1000] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-9 0
+0:0:0:0:0:0:0:1 - - [30/Mar/2014:16:01:55 +1000] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-9 0
+0:0:0:0:0:0:0:1 - - [30/Mar/2014:16:01:58 +1000] "POST /study/ajax/getIncidents.json HTTP/1.1" 200 199 http-bio-8080-exec-5 2551
