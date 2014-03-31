@@ -1,6 +1,5 @@
 package com.tatiana.study.web;
 
-
 public class MapMBean {
 
 	private float nELat = 0;
@@ -10,6 +9,14 @@ public class MapMBean {
 	private float sWLat = 0;
 
 	private float sWLng = 0;
+
+	private float refNELat = 0;
+
+	private float refNELng = 0;
+
+	private float refSWLat = 0;
+
+	private float refSWLng = 0;
 
 	public MapMBean() {
 		super();
@@ -46,6 +53,38 @@ public class MapMBean {
 
 	public void setsWLng(final float sWLng) {
 		this.sWLng = sWLng;
+	}
+
+	public float getRefNELat() {
+		return refNELat;
+	}
+
+	public void setRefNELat(final float refNELat) {
+		this.refNELat = refNELat;
+	}
+
+	public float getRefNELng() {
+		return refNELng;
+	}
+
+	public void setRefNELng(final float refNELng) {
+		this.refNELng = refNELng;
+	}
+
+	public float getRefSWLat() {
+		return refSWLat;
+	}
+
+	public void setRefSWLat(final float refSWLat) {
+		this.refSWLat = refSWLat;
+	}
+
+	public float getRefSWLng() {
+		return refSWLng;
+	}
+
+	public void setRefSWLng(final float refSWLng) {
+		this.refSWLng = refSWLng;
 	}
 
 }

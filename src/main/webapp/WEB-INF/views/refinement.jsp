@@ -6,21 +6,28 @@
 <head>
 <title>Query refinement</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="<c:url value="/resources/form.css" />" rel="stylesheet"
 	type="text/css" />
-	<script type="text/javascript"
-		src="<c:url value="/resources/jquery/1.10.2/jquery.js" />"></script>
+<link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css"/>"
+	rel="stylesheet" type="text/css" />
+<script type="text/javascript"
+	src="<c:url value="/resources/jquery/1.10.2/jquery.js" />"></script>
 </head>
 <body>
-	<div id="formsContent">
-		<form:form id="refinement" method="post" modelAttribute="formBean"
-			cssClass="cleanform" action="${pageContext.request.contextPath}/">
-			<p>Query refinement</p>
-			<div>
-			
-				<fieldset>
-					<legend>Map data:</legend>
+	<form:form id="refinement" method="post" modelAttribute="formBean"
+		cssClass="cleanform" action="${pageContext.request.contextPath}/">
+		<div class="container">
+			<div class="col-md-2">
+				<h3 style="color: #ec971f;">ORange</h3>
 
+			</div>
+
+			<div class="col-md-6" style="height: 400pt;" id="map"></div>
+
+			<div class="col-md-2">
+				<fieldset>
+					<legend>Initial Range Query:</legend>
 					<form:label path="nELat">
 		  			NE Latitude <form:errors path="nELat" cssClass="error" />
 					</form:label>
@@ -41,19 +48,45 @@
 					</form:label>
 					<form:input path="sWLng" />
 
-					<div id="map" style="width: 600; height: 480px;"></div>
+					<p>
+						<input type="submit" value="Calculate">
+					</p>
+					<div id="msg"></div>
+
 					<p>
 						<input id="clearMap" type="button" value="Clear Map">
 					</p>
 				</fieldset>
-			</div>
-			<p>
-				<input type="submit" value="Calculate">
-			</p>
-			<div id="msg"></div>
-		</form:form>
-	</div>
 
+			</div>
+
+			<div class="col-md-2">
+				<fieldset>
+					<legend>Refined Range Query</legend>
+					<form:label path="refNELat">
+		  			NE Latitude <form:errors path="refNELat" cssClass="error" />
+					</form:label>
+					<form:input path="refNELat" />
+
+					<form:label path="refNELng">
+		  			NE Longitude <form:errors path="refNELng" cssClass="error" />
+					</form:label>
+					<form:input path="refNELng" />
+
+					<form:label path="refSWLat">
+		  			SW Latitude <form:errors path="refSWLat" cssClass="error" />
+					</form:label>
+					<form:input path="refSWLat" />
+
+					<form:label path="refSWLng">
+		  			SW Longitude <form:errors path="refSWLng" cssClass="error" />
+					</form:label>
+					<form:input path="refSWLng" />
+				</fieldset>
+			</div>
+
+		</div>
+	</form:form>
 
 	<script type="text/javascript">
 		window.myData = [];
@@ -63,30 +96,30 @@
 		window.map = null;
 		window.myData.mapExists = false;
 		window.isBusiness = false;
-		
-		function pollStatus(){
-			   setTimeout(function(){
-			      $.ajax({ url: "ajax/status.json", success: function(data){
-			    	  if (!window.statusError){
-			    		  if (!window.stop) {
-			    	 	     $("#msg").html(data.message + " " + data.progress);
-                    		  pollStatus();
-                     	 	}
-                     	 }
-			      }, dataType: "json",
-					beforeSend : function(
-							xhr) {
+
+		function pollStatus() {
+			setTimeout(function() {
+				$.ajax({
+					url : "ajax/status.json",
+					success : function(data) {
+						if (!window.statusError) {
+							if (!window.stop) {
+								$("#msg").html(
+										data.message + " " + data.progress);
+								pollStatus();
+							}
+						}
+					},
+					dataType : "json",
+					beforeSend : function(xhr) {
+						xhr.setRequestHeader("Accept", "application/json");
 						xhr
-								.setRequestHeader(
-										"Accept",
+								.setRequestHeader("Content-Type",
 										"application/json");
-						xhr
-								.setRequestHeader(
-										"Content-Type",
-										"application/json");
-					},});
-			  }, 5000);
-		     
+					},
+				});
+			}, 5000);
+
 		}
 
 		function drawOutMap(data, diverData) {
@@ -119,7 +152,7 @@
 				dataBorders.setMap(outMap);
 			}
 		}
-		
+
 		function plotIncidents(inputData) {
 			var outData = new Object();
 			outData.allIncidentsData = [];
@@ -129,42 +162,40 @@
 			$msg.html("<p><b>Loading points...</b></p>");
 			var urlAjax = "ajax/getIncidents.json";
 			outData.statusOk = true;
-			$
-					.ajax({
-						type : "post",
-						url : urlAjax,
-						data : inputData,
-						dataType : 'json',
-						beforeSend : function(xhr) {
-							xhr.setRequestHeader("Accept", "application/json");
-							xhr.setRequestHeader("Content-Type", "application/json");
-						},
-						complete : function(xhr, status) {
-							var data = xhr.responseText;
-							var parsed = $.parseJSON(data);
-							var status = parsed.status;
-							if (status == "OK") {
-									var allIncidents = parsed.incidentArray;
-									var allIncidentsData = [];
-									for ( var i = 0; i < allIncidents.length; i++) {
-										var temp = [];
-										temp.push(allIncidents[i].latit);
-										temp.push(allIncidents[i].longit);
-										temp.push("");
-										allIncidentsData.push(temp);
-									}
-									outData.allIncidentsData = allIncidentsData;
-									reDrawMap(outData);
-								}
-							else {
-								outData.statusOk = false;
-								outData.errors = parsed.errors;
-							}
-						},
-						error : function(xhr) {
-							outData.statusOk = false;
+			$.ajax({
+				type : "post",
+				url : urlAjax,
+				data : inputData,
+				dataType : 'json',
+				beforeSend : function(xhr) {
+					xhr.setRequestHeader("Accept", "application/json");
+					xhr.setRequestHeader("Content-Type", "application/json");
+				},
+				complete : function(xhr, status) {
+					var data = xhr.responseText;
+					var parsed = $.parseJSON(data);
+					var status = parsed.status;
+					if (status == "OK") {
+						var allIncidents = parsed.incidentArray;
+						var allIncidentsData = [];
+						for ( var i = 0; i < allIncidents.length; i++) {
+							var temp = [];
+							temp.push(allIncidents[i].latit);
+							temp.push(allIncidents[i].longit);
+							temp.push("");
+							allIncidentsData.push(temp);
 						}
-					});
+						outData.allIncidentsData = allIncidentsData;
+						reDrawMap(outData);
+					} else {
+						outData.statusOk = false;
+						outData.errors = parsed.errors;
+					}
+				},
+				error : function(xhr) {
+					outData.statusOk = false;
+				}
+			});
 		}
 
 		function reDrawMap(dataPoints) {
@@ -173,11 +204,13 @@
 				var mapEl = $("#map")[0];
 				var zoom = 10;
 				if (typeof window.myData.mapCenter == 'undefined') {
-					window.myData.mapCenter = new google.maps.LatLng(32.95733667, -117.1437767);
+					window.myData.mapCenter = new google.maps.LatLng(
+							32.95733667, -117.1437767);
 				}
 				var $msg = $("#msg");
 				if (dataPoints.statusOk) {
-					window.map = drawSourceMap(mapEl, window.myData.mapCenter, zoom);
+					window.map = drawSourceMap(mapEl, window.myData.mapCenter,
+							zoom);
 					drawIncidentsMap(dataPoints.allIncidentsData, map)
 					areaChanged(window.map.getBounds());
 					window.myData.mapExists = true;
@@ -188,125 +221,153 @@
 				} else {
 					var errors = dataPoints.errors;
 					var errorMessage = "";
-					for (var i = 0; i < errors.length; i++) {
-						 errorMessage = errorMessage + "<p>" + errors[i].message + "</p>";
+					for ( var i = 0; i < errors.length; i++) {
+						errorMessage = errorMessage + "<p>" + errors[i].message
+								+ "</p>";
 					}
 					$msg.html(errorMessage);
 				}
 			}
 		}
-		
-		
 
-		$(document).ready(function() {
+		$(document)
+				.ready(
+						function() {
 							$("#msg").html("");
-							
-							
-							$("#clearMap").click(function() {
-								window.myData.mapExists = false;
-								plotIncidents(JSON
-										.stringify($('#refinement').serializeObject()));
-							});
 
-							$("#refinement").submit(function(event) {
-												$(":submit").attr("disabled", true);
+							$("#clearMap").click(
+									function() {
+										window.myData.mapExists = false;
+										plotIncidents(JSON.stringify($(
+												'#refinement')
+												.serializeObject()));
+									});
+
+							$("#refinement")
+									.submit(
+											function(event) {
+												$(":submit").attr("disabled",
+														true);
 												var $msg = $("#msg");
 												$msg.removeClass("error");
 												$msg.addClass("warning");
-												$msg.html("<p><b>Calculating...</b></p>");
+												$msg
+														.html("<p><b>Calculating...</b></p>");
 												window.statusError = false;
 												window.stop = false;
-											
-												var urlAjax = "ajax/processIncidents.json";
-												$.ajax({
-													type : "post",
-													url : urlAjax,
-													data : JSON
-															.stringify($('#refinement').serializeObject()),
-													dataType : 'json',
-													beforeSend : function(
-															xhr) {
-														xhr
-																.setRequestHeader(
-																		"Accept",
-																		"application/json");
-														xhr
-																.setRequestHeader(
-																		"Content-Type",
-																		"application/json");
-													},
-													complete : function(xhr, status) {
-														var data = xhr.responseText;
-														var parsed = $
-																.parseJSON(data);
 
-														var status = parsed.status;
-														if (status == "OK") {
-														
-															var r_q = parsed.r_q;
-															
-															var resultBounds = new google.maps.LatLngBounds(
-																      new google.maps.LatLng(r_q[2], r_q[3]),
-																      new google.maps.LatLng(r_q[0], r_q[1])
-																  );
-															
-															var dataBorders = new google.maps.Rectangle({
-																bounds : resultBounds,
-																strokeColor : '#ED9121',
-																strokeOpacity : 0.8,
-																strokeWeight : 2,
-																fillColor : '#ED9121',
-																fillOpacity : 0.25,
-																clickable : false,
-																editable : false,
-																draggable : false
-															});
-															
-								
-															dataBorders.setMap(window.map);
-																
-                                                            window.stop = true;
-															$msg.removeClass("error info warning");
-															$msg.addClass("info");
-															$msg.html("Ok");
-														} 
-														if (status == "ERROR") {
-															window.statusError = true;
-															window.stop = true;
-															$msg.removeClass("info warning");
-															$msg.addClass("error");
-															var errors = parsed.errors;
-															var errorMessage = "";
-															for (var i = 0; i < errors.length; i++) {
-																 errorMessage = errorMessage + "<p>" + errors[i].message + "</p>";
+												var urlAjax = "ajax/processIncidents.json";
+												$
+														.ajax({
+															type : "post",
+															url : urlAjax,
+															data : JSON
+																	.stringify($(
+																			'#refinement')
+																			.serializeObject()),
+															dataType : 'json',
+															beforeSend : function(
+																	xhr) {
+																xhr
+																		.setRequestHeader(
+																				"Accept",
+																				"application/json");
+																xhr
+																		.setRequestHeader(
+																				"Content-Type",
+																				"application/json");
+															},
+															complete : function(
+																	xhr, status) {
+																var data = xhr.responseText;
+																var parsed = $
+																		.parseJSON(data);
+
+																var status = parsed.status;
+																if (status == "OK") {
+
+																	var r_q = parsed.r_q;
+
+																	var resultBounds = new google.maps.LatLngBounds(
+																			new google.maps.LatLng(
+																					r_q[2],
+																					r_q[3]),
+																			new google.maps.LatLng(
+																					r_q[0],
+																					r_q[1]));
+
+																	var dataBorders = new google.maps.Rectangle(
+																			{
+																				bounds : resultBounds,
+																				strokeColor : '#ED9121',
+																				strokeOpacity : 0.8,
+																				strokeWeight : 2,
+																				fillColor : '#ED9121',
+																				fillOpacity : 0.25,
+																				clickable : false,
+																				editable : false,
+																				draggable : false
+																			});
+
+																	dataBorders
+																			.setMap(window.map);
+
+																	window.stop = true;
+																	$msg
+																			.removeClass("error info warning");
+																	$msg
+																			.addClass("info");
+																	$msg
+																			.html("Ok");
+																}
+																if (status == "ERROR") {
+																	window.statusError = true;
+																	window.stop = true;
+																	$msg
+																			.removeClass("info warning");
+																	$msg
+																			.addClass("error");
+																	var errors = parsed.errors;
+																	var errorMessage = "";
+																	for ( var i = 0; i < errors.length; i++) {
+																		errorMessage = errorMessage
+																				+ "<p>"
+																				+ errors[i].message
+																				+ "</p>";
+																	}
+																	$msg
+																			.html(errorMessage);
+																}
+																$(":submit")
+																		.removeAttr(
+																				"disabled");
+															},
+															error : function(
+																	xhr) {
+																window.statusError = true;
+																window.stop = true;
+																$msg
+																		.removeClass("info warning");
+																$msg
+																		.addClass("error");
+																$msg
+																		.html("<p>Error executing AJAX call</p>");
+																$(":submit")
+																		.removeAttr(
+																				"disabled");
 															}
-															$msg.html(errorMessage);
-														}
-														$(":submit").removeAttr("disabled");
-													},
-													error : function(
-															xhr) {
-														window.statusError = true;
-														window.stop = true;
-														$msg.removeClass("info warning");
-														$msg.addClass("error");
-														$msg.html(
-																		"<p>Error executing AJAX call</p>");
-														$(":submit")
-																.removeAttr(
-																		"disabled");
-													}
-												});
+														});
 
 												event.preventDefault();
 											});
-							
-							plotIncidents(JSON
-									.stringify($('#refinement').serializeObject()));
+
+							plotIncidents(JSON.stringify($('#refinement')
+									.serializeObject()));
 						});
 	</script>
 	<script type="text/javascript"
 		src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing&amp;sensor=true&amp;key=AIzaSyCXlPs7edJYVCqhzfll3mozU5vuFc7T1Xk">
+		
 	</script>
 	<script type="text/javascript"
 		src="<c:url value="/resources/d3/d3.min.js" />"></script>

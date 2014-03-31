@@ -118,3 +118,26 @@
 	stroke-width: 1px;
 	opacity: 0.7;
 }
+
+/*Bootsrap layout*/
+
+.form-control {
+  margin-bottom: 10px;
+}
+
+fieldset {
+    border: 1px; color: #080808;
+}
+
+legend {
+    border: 0px;
+}
+
+#neLat {
+    padding-bottom: 15px;
+}
+
+fieldset {
+    border: 1px solid #CCCCCC;
+    padding: 10px;
+}
