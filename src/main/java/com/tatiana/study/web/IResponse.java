@@ -13,6 +13,57 @@ public class IResponse {
 	private double deviation;
 	private String status;
 	private String message;
+	private float refNELat = 0;
+	private float refNELng = 0;
+	private float refSWLat = 0;
+	private float refSWLng = 0;
+	private int refCardinality = 1;
+
+
+	public float getRefNELat() {
+		return refNELat;
+	}
+
+	public void setRefNELat(float refNELat) {
+		this.refNELat = refNELat;
+	}
+
+	public float getRefNELng() {
+		return refNELng;
+	}
+
+	public void setRefNELng(float refNELng) {
+		this.refNELng = refNELng;
+	}
+
+	public float getRefSWLat() {
+		return refSWLat;
+	}
+
+	public void setRefSWLat(float refSWLat) {
+		this.refSWLat = refSWLat;
+	}
+
+	public float getRefSWLng() {
+		return refSWLng;
+	}
+
+	public void setRefSWLng(float refSWLng) {
+		this.refSWLng = refSWLng;
+	}
+
+	public int getRefCardinality() {
+		return refCardinality;
+	}
+
+	public void setRefCardinality(int refCardinality) {
+		this.refCardinality = refCardinality;
+	}
+
+	public void setDeviation(float deviation) {
+		this.deviation = deviation;
+	}
+
 	private final List<Error> errors = new ArrayList<>();
 
 	public double[] getR_q() {

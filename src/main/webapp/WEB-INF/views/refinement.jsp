@@ -352,7 +352,8 @@
 																if (status == "OK") {
 
 																	var r_q = parsed.r_q;
-
+																	
+																	$("#refNELat").val('' + parsed.refSWLat);
 																	var resultBounds = new google.maps.LatLngBounds(
 																			new google.maps.LatLng(
 																					r_q[2],

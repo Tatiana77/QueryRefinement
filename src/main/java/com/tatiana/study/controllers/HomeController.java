@@ -125,6 +125,7 @@ public class HomeController {
 			logger.debug("Value of result query nE lat: ", r_q[0]);
 			response.setCardinality(77);
 			response.setDeviation(0.77);
+			response.setRefSWLat(0.123456F);
 
 		} catch (Exception e) {
 			logger.error("Error: " + e.getMessage(), e);
