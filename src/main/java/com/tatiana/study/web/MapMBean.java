@@ -2,25 +2,26 @@ package com.tatiana.study.web;
 
 public class MapMBean {
 
+	// Inputs
 	private float nELat = 0;
-
 	private float nELng = 0;
-
 	private float sWLat = 0;
-
 	private float sWLng = 0;
+	private final int cardinality = 1;
+	private final int reqCardinality = 1;
+	private float alpha;
+	private final String scheme = "saqrcs";
 
+	// Outputs
 	private float refNELat = 0;
-
 	private float refNELng = 0;
-
 	private float refSWLat = 0;
-
 	private float refSWLng = 0;
+	private int refCardinality = 1;
+	private float deviation = 0;
 
 	public MapMBean() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public float getnELat() {
@@ -85,6 +86,42 @@ public class MapMBean {
 
 	public void setRefSWLng(final float refSWLng) {
 		this.refSWLng = refSWLng;
+	}
+
+	public float getAlpha() {
+		return alpha;
+	}
+
+	public void setAlpha(final float alpha) {
+		this.alpha = alpha;
+	}
+
+	public int getCardinality() {
+		return cardinality;
+	}
+
+	public int getReqCardinality() {
+		return reqCardinality;
+	}
+
+	public String getScheme() {
+		return scheme;
+	}
+
+	public int getRefCardinality() {
+		return refCardinality;
+	}
+
+	public void setRefCardinality(final int refCardinality) {
+		this.refCardinality = refCardinality;
+	}
+
+	public float getDeviation() {
+		return deviation;
+	}
+
+	public void setDeviation(final float deviation) {
+		this.deviation = deviation;
 	}
 
 }

@@ -120,24 +120,11 @@ public class HomeController {
 			r_q = Refinement.SAQR_CSP_MDM(iq_norm, dmaxs, dmins, d, k, size, w, scale, query, true, true, true, 0.5,
 					0.125, 0);
 
-			// assign the new r_q to our new text boxes:
-
-			// Incident[] incidentArray =
-			// dbConnect.findIncidents(formBean.getnELat(), formBean.getnELng(),
-			// formBean.getsWLat(), formBean.getsWLng());
-
-			// if (incidentArray.length == 0) {
-			// response.setStatus("ERROR");
-			// response.addError("", "No incidents found!");
-			// }
-			// response.setIncidentArray(incidentArray);
-
-			// Incident[] incidentRefArray = Refinement.refine(incidentArray,
-			// incidentArray.length,
-			// new BigDecimal("0.005"));
 			double[] rq_real = Refinement.toReal(r_q, d, 33.0952238976, 32.5414967546, -116.928885733, -117.281367428);
 			response.setR_q(rq_real);
 			logger.debug("Value of result query nE lat: ", r_q[0]);
+			response.setCardinality(77);
+			response.setDeviation(0.77);
 
 		} catch (Exception e) {
 			logger.error("Error: " + e.getMessage(), e);

@@ -9,6 +9,8 @@ public class IResponse {
 	private Incident[] incidentArray;
 	private Incident[] incidentRefArray;
 	private double[] r_q;
+	private int cardinality;
+	private double deviation;
 	private String status;
 	private String message;
 	private final List<Error> errors = new ArrayList<>();
@@ -56,6 +58,22 @@ public class IResponse {
 
 	public void setMessage(final String message) {
 		this.message = message;
+	}
+
+	public double getCardinality() {
+		return cardinality;
+	}
+
+	public void setCardinality(final int cardinality) {
+		this.cardinality = cardinality;
+	}
+
+	public double getDeviation() {
+		return deviation;
+	}
+
+	public void setDeviation(final double deviation) {
+		this.deviation = deviation;
 	}
 
 	public List<Error> getErrors() {

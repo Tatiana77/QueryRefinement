@@ -1,87 +1,152 @@
+<!--  Spring libraries?? -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page session="false"%>
+
 <html>
-<head>
-<title>Query refinement</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="<c:url value="/resources/form.css" />" rel="stylesheet"
-	type="text/css" />
-<link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css"/>"
-	rel="stylesheet" type="text/css" />
-<script type="text/javascript"
-	src="<c:url value="/resources/jquery/1.10.2/jquery.js" />"></script>
-</head>
-<body>
-	<form:form id="refinement" method="post" modelAttribute="formBean"
-		cssClass="cleanform" action="${pageContext.request.contextPath}/">
-		<div class="container">
-			<div class="col-md-2">
-				<h3 style="color: #ec971f;">ORange</h3>
+	
+	<head>
+		<title>Query refinement</title>
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		
+		<!--  Screen configuration getting -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<!-- Current application css -->
+		<link href="<c:url value="/resources/form.css" />" rel="stylesheet" type="text/css" />
+		
+		<!--  Bootsrap library, interface stetics -->
+		<link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css"/>" rel="stylesheet" type="text/css" />
+		
+		<!--  Jquery library -->
+		<script type="text/javascript" src="<c:url value="/resources/jquery/1.10.2/jquery.js" />"></script>
+	
+	</head>
 
-			</div>
+	<body>
+		
+		<form:form id="refinement" method="post" modelAttribute="formBean" cssClass="cleanform" action="${pageContext.request.contextPath}/">
+			
+			<div class="container">
+				
+				<!-- First column, interface, logo -->
+				<div class="col-md-2">
+					<span style="color: #ec971f;">ORange</span><br/>
+					Objective aware<br/>
+					Range Query Refinement<br/><br/>
+					Dataset used: <br/>
+					San Diego, CA crime incidents.
+				</div>
 
-			<div class="col-md-6" style="height: 400pt;" id="map"></div>
+				<!-- Second column, interface, map container -->
+				<div class="col-md-6" style="height: 320pt;" id="map">
+			
+				</div>
 
-			<div class="col-md-2">
+				<!-- Third column, interface, inputs -->
+				<div class="col-md-2">
 				<fieldset>
 					<legend>Initial Range Query:</legend>
+					
 					<form:label path="nELat">
-		  			NE Latitude <form:errors path="nELat" cssClass="error" />
+		  				NE Latitude <form:errors path="nELat" cssClass="error" />
 					</form:label>
 					<form:input path="nELat" />
 
 					<form:label path="nELng">
-		  			NE Longitude <form:errors path="nELng" cssClass="error" />
+		  				NE Longitude <form:errors path="nELng" cssClass="error" />
 					</form:label>
 					<form:input path="nELng" />
 
 					<form:label path="sWLat">
-		  			SW Latitude <form:errors path="sWLat" cssClass="error" />
+		  				SW Latitude <form:errors path="sWLat" cssClass="error" />
 					</form:label>
 					<form:input path="sWLat" />
 
 					<form:label path="sWLng">
-		  			SW Longitude <form:errors path="sWLng" cssClass="error" />
+		  				SW Longitude <form:errors path="sWLng" cssClass="error" />
 					</form:label>
 					<form:input path="sWLng" />
-
-					<p>
-						<input type="submit" value="Calculate">
-					</p>
-					<div id="msg"></div>
-
-					<p>
-						<input id="clearMap" type="button" value="Clear Map">
-					</p>
+					
+					<form:label path="cardinality">
+		  				Cardinality <form:errors path="cardinality" cssClass="error" />
+					</form:label>
+					<form:input path="cardinality" />
+					
+					<form:label path="reqCardinality">
+		  				Required Cardinality <form:errors path="reqCardinality" cssClass="error" />
+					</form:label>
+					<form:input path="reqCardinality" />
+					
+					<form:label path="alpha">
+		  				Alpha <form:errors path="alpha" cssClass="error" />
+					</form:label>
+					<form:input path="alpha" type="range" min="0" max="1" value="0" step="0.01" onchange="showValue(this.value)" /><span id="range">0</span>
+            		<script type="text/javascript">
+                		function showValue(newValue)
+                		{
+                    		document.getElementById("range").innerHTML=newValue;
+                		}
+            		</script>
+					
+					<br></br>
+					<form:label path="scheme">
+		  				Scheme <form:errors path="scheme" cssClass="error" />
+					</form:label>
+					<form:select path="scheme">
+						<form:option selected="selected" value="saqrs">SAQR-S</form:option>
+						<form:option value="saqrcs">SAQR-CS</form:option>
+						<form:option value="hillClimbingHC">Hill Climbing HC</form:option>
+					</form:select>
 				</fieldset>
-
 			</div>
 
+			<!-- Fourth column, interface, outputs -->
 			<div class="col-md-2">
 				<fieldset>
 					<legend>Refined Range Query</legend>
+					
 					<form:label path="refNELat">
-		  			NE Latitude <form:errors path="refNELat" cssClass="error" />
+		  				NE Latitude <form:errors path="refNELat" cssClass="error" />
 					</form:label>
 					<form:input path="refNELat" />
 
 					<form:label path="refNELng">
-		  			NE Longitude <form:errors path="refNELng" cssClass="error" />
+		  				NE Longitude <form:errors path="refNELng" cssClass="error" />
 					</form:label>
 					<form:input path="refNELng" />
 
 					<form:label path="refSWLat">
-		  			SW Latitude <form:errors path="refSWLat" cssClass="error" />
+		  				SW Latitude <form:errors path="refSWLat" cssClass="error" />
 					</form:label>
 					<form:input path="refSWLat" />
 
 					<form:label path="refSWLng">
-		  			SW Longitude <form:errors path="refSWLng" cssClass="error" />
+		  				SW Longitude <form:errors path="refSWLng" cssClass="error" />
 					</form:label>
 					<form:input path="refSWLng" />
+					
+					<form:label path="refCardinality">
+		  				Cardinality <form:errors path="refCardinality" cssClass="error" />
+					</form:label>
+					<form:input path="refCardinality" />
+					
+					<form:label path="deviation">
+		  				Deviation <form:errors path="deviation" cssClass="error" />
+					</form:label>
+					<form:input path="deviation" />
+				
+				
+					<p>
+						<input type="submit" value="Calculate">
+					</p>
+					<div id="msg"></div>
+					<p>
+						<input id="clearMap" type="button" value="Clear Map">
+					</p>
+				
 				</fieldset>
 			</div>
 
