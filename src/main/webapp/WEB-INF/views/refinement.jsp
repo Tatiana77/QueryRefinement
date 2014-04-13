@@ -1,4 +1,4 @@
-<!--  Spring libraries?? -->
+<!--  Tag library -->
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -14,11 +14,11 @@
 		<!--  Screen configuration getting -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
-		<!-- Current application css -->
-		<link href="<c:url value="/resources/form.css" />" rel="stylesheet" type="text/css" />
-		
 		<!--  Bootsrap library, interface stetics -->
 		<link href="<c:url value="/resources/bootstrap/css/bootstrap.min.css"/>" rel="stylesheet" type="text/css" />
+
+		<!-- Current application css -->
+		<link href="<c:url value="/resources/form.css" />" rel="stylesheet" type="text/css" />
 		
 		<!--  Jquery library -->
 		<script type="text/javascript" src="<c:url value="/resources/jquery/1.10.2/jquery.js" />"></script>
@@ -30,10 +30,11 @@
 		<form:form id="refinement" method="post" modelAttribute="formBean" cssClass="cleanform" action="${pageContext.request.contextPath}/">
 			
 			<div class="container">
-				
+				<div class='row'> dk fjdslfjkdsjf </div>
+				<div class='row'>    
 				<!-- First column, interface, logo -->
 				<div class="col-md-2">
-					<span style="color: #ec971f;">ORange</span><br/>
+					<span class="title">ORange</span><br/>
 					Objective aware<br/>
 					Range Query Refinement<br/><br/>
 					Dataset used: <br/>
@@ -149,7 +150,7 @@
 				
 				</fieldset>
 			</div>
-
+			</div>
 		</div>
 	</form:form>
 
@@ -265,7 +266,6 @@
 
 		function reDrawMap(dataPoints) {
 			if (!window.myData.mapExists) {
-				var $msg = $("#msg");
 				var mapEl = $("#map")[0];
 				var zoom = 10;
 				if (typeof window.myData.mapCenter == 'undefined') {
@@ -276,7 +276,7 @@
 				if (dataPoints.statusOk) {
 					window.map = drawSourceMap(mapEl, window.myData.mapCenter,
 							zoom);
-					drawIncidentsMap(dataPoints.allIncidentsData, map)
+					drawIncidentsMap(dataPoints.allIncidentsData, map);
 					areaChanged(window.map.getBounds());
 					window.myData.mapExists = true;
 					window.stop = true;
@@ -294,90 +294,72 @@
 				}
 			}
 		}
+		
+		function drawOutValues(r_q, refCardinality, deviation){
+			$("#refNELat").val(r_q[2]);
+			$("#refNELng").val(r_q[3]);
+			$("#refSWLat").val(r_q[0]);
+			$("#refSWLng").val(r_q[1]);
+			$("#refCardinality").val(refCardinality);
+			$("#deviation").val(deviation);
+		}
+		
+		function drawRefinedRectangle(r_q){
+			var resultBounds = new google.maps.LatLngBounds(
+					new google.maps.LatLng(r_q[2] + 0.01, r_q[3] + 0.01),
+					new google.maps.LatLng(r_q[0], r_q[1]));
 
-		$(document)
-				.ready(
-						function() {
-							$("#msg").html("");
+			var refinedRectangle = new google.maps.Rectangle(
+					{
+						bounds : resultBounds,
+						strokeColor : '#ED9121',
+						strokeOpacity : 0.8,
+						strokeWeight : 2,
+						fillColor : '#ED9121',
+						fillOpacity : 0.25,
+						clickable : false,
+						editable : false,
+						draggable : false
+					});
 
-							$("#clearMap").click(
-									function() {
-										window.myData.mapExists = false;
-										plotIncidents(JSON.stringify($(
-												'#refinement')
-												.serializeObject()));
-									});
+			refinedRectangle.setMap(window.map);
+		}
 
-							$("#refinement")
-									.submit(
-											function(event) {
-												$(":submit").attr("disabled",
-														true);
-												var $msg = $("#msg");
-												$msg.removeClass("error");
-												$msg.addClass("warning");
-												$msg
-														.html("<p><b>Calculating...</b></p>");
-												window.statusError = false;
-												window.stop = false;
 
-												var urlAjax = "ajax/processIncidents.json";
-												$
-														.ajax({
-															type : "post",
-															url : urlAjax,
-															data : JSON
-																	.stringify($(
-																			'#refinement')
-																			.serializeObject()),
-															dataType : 'json',
-															beforeSend : function(
-																	xhr) {
-																xhr
-																		.setRequestHeader(
-																				"Accept",
-																				"application/json");
-																xhr
-																		.setRequestHeader(
-																				"Content-Type",
-																				"application/json");
-															},
-															complete : function(
-																	xhr, status) {
-																var data = xhr.responseText;
-																var parsed = $
-																		.parseJSON(data);
+		$(document).ready(function() {
+			$("#msg").html("");
 
-																var status = parsed.status;
-																if (status == "OK") {
+			$("#clearMap").click(function() {
+				window.myData.mapExists = false;
+				plotIncidents(JSON.stringify($('#refinement').serializeObject()));
+			});
 
-																	var r_q = parsed.r_q;
-																	
-																	$("#refNELat").val('' + parsed.refSWLat);
-																	var resultBounds = new google.maps.LatLngBounds(
-																			new google.maps.LatLng(
-																					r_q[2],
-																					r_q[3]),
-																			new google.maps.LatLng(
-																					r_q[0],
-																					r_q[1]));
+			$("#refinement").submit(function(event) {
+				$(":submit").attr("disabled", true);
+				var $msg = $("#msg");
+				$msg.removeClass("error");
+				$msg.addClass("warning");
+				$msg.html("<p><b>Calculating...</b></p>");
+				window.statusError = false;
+				window.stop = false;
 
-																	var dataBorders = new google.maps.Rectangle(
-																			{
-																				bounds : resultBounds,
-																				strokeColor : '#ED9121',
-																				strokeOpacity : 0.8,
-																				strokeWeight : 2,
-																				fillColor : '#ED9121',
-																				fillOpacity : 0.25,
-																				clickable : false,
-																				editable : false,
-																				draggable : false
-																			});
-
-																	dataBorders
-																			.setMap(window.map);
-
+				$.ajax({
+					type : "post",
+					url : "ajax/processIncidents.json",
+					data : JSON.stringify($('#refinement').serializeObject()),
+					dataType : 'json',
+					beforeSend : function(xhr) {
+						xhr.setRequestHeader("Accept","application/json");
+						xhr.setRequestHeader("Content-Type","application/json");
+					},
+					complete : function(xhr, status) {
+						var data = xhr.responseText;
+						var parsed = $.parseJSON(data);
+						var status = parsed.status;
+						if (status == "OK") {
+							drawOutValues(parsed.r_q, parsed.refCardinality, parsed.deviation);
+							drawRefinedRectangle(parsed.r_q);
+				
 																	window.stop = true;
 																	$msg
 																			.removeClass("error info warning");

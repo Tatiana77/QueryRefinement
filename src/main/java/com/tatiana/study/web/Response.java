@@ -9,8 +9,6 @@ public class Response {
 
 	private Bussines[] bussinesArray;
 	private Bussines[] bussinesRefArray;
-	private int cardinality;
-	private double deviation;
 	private String status;
 	private String message;
 	private final List<Error> errors = new ArrayList<>();
@@ -62,22 +60,6 @@ public class Response {
 
 	public void setBussinesRefArray(final Bussines[] bussinesRefArray) {
 		this.bussinesRefArray = bussinesRefArray;
-	}
-
-	public int getCardinality() {
-		return cardinality;
-	}
-
-	public void setCardinality(final int cardinality) {
-		this.cardinality = cardinality;
-	}
-
-	public double getDeviation() {
-		return deviation;
-	}
-
-	public void setDeviation(final double deviation) {
-		this.deviation = deviation;
 	}
 
 }

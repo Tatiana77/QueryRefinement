@@ -123,9 +123,8 @@ public class HomeController {
 			double[] rq_real = Refinement.toReal(r_q, d, 33.0952238976, 32.5414967546, -116.928885733, -117.281367428);
 			response.setR_q(rq_real);
 			logger.debug("Value of result query nE lat: ", r_q[0]);
-			response.setCardinality(77);
+			response.setRefCardinality(77);
 			response.setDeviation(0.77);
-			response.setRefSWLat(0.123456F);
 
 		} catch (Exception e) {
 			logger.error("Error: " + e.getMessage(), e);

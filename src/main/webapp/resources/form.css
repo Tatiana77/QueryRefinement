@@ -1,140 +1,39 @@
 @import url("messages/messages.css");
 
-/* CLEAN FORM
-/////////////////////////////*/
-
-/* General */
-
-.cleanform {
-font-size:1em;
-width:40em;
-color:#1b1b1b;
-text-align:left;
-margin:1em auto
-}
-
-/* Elements */
-
-.cleanform label,.cleanform legend {
-padding:0;
-margin:0.3em 0
-}
-
-.cleanform fieldset {
-padding:0.7em;
-border:1px solid #ddd;
-margin:0 0 0.5em 0
-}
-
-.cleanform label {
-font-weight:bold
-}
-
-.cleanform fieldset input {
-width:70%;
-line-height:1.5em;
-padding:0.15em
-}
-
-.cleanform .radio input,
-.cleanform .checkbox input {
-width:auto;
-border:none;
-margin:0 1.5em 0 0
-}
-
-.cleanform input, .cleanform textarea, .cleanform select {
-display:block;
-margin-bottom:1em;
-font-size:1em;
-border:1px solid #bbb;
-padding:0.15em;
-margin-right:1em
-}
-
-.cleanform .radio label, .cleanform .radio input,
-.cleanform .checkbox label, .cleanform .checkbox input {
-display:inline;
-margin:0 1.5em 0 0
-}
-
-.cleanform .radio input, .cleanform .checkbox input {
-margin:0 0.3em 0 0
-}
-
-.cleanform .multiple label{
-float:left;
-width:29%;
-overflow:hidden;
-padding-left:1px
-}
-
-.cleanform .multiple input {
-cursor:pointer
-}
-
-
-/* information */
-
-.cleanform .formInfo {
-margin-bottom:1em;
-padding-bottom:0.5em;
-border-bottom:0.1em solid #ddd
-}
-
-.cleanform .formInfo h2 {
-color:#00889e;
-font-weight:bold;
-font-size:1.2em;
-margin-bottom:1em
-}
-
-.cleanform .formInfo p{
-text-align:justify
-}
-
-.cleanform .required {
-color:#ff3838;
-font-weight:bold;
-font-size:0.8em
-}
-
 /* Map */
-
 .stations,.stations svg {
-position: absolute;
+	position: absolute;
 }
 
 .stations svg {
-width: 60px;
-height: 20px;
-padding-right: 100px;
-font: 10px sans-serif;
+	width: 60px;
+	height: 20px;
+	padding-right: 100px;
+	font: 10px sans-serif;
 }
 
 .stations circle {
-fill: blue;
-stroke: black;
-stroke-width: 1px;
-opacity: 0.7;
+	fill: blue;
+	stroke: black;
+	stroke-width: 1px;
+	opacity: 0.7;
 }
 
-/*Bootsrap layout*/
-
-.form-control {
-  margin-bottom: 10px;
-}
-
+/*Bootstrap layout*/
 fieldset {
-    border: 1px; color: #080808;
+	font-size: 10px;
 }
 
 legend {
-    border: 0px;
-    font-size: 7px;
+	font-size: 12px;
 }
 
-fieldset {
-    border: 1px solid #CCCCCC;
-    padding: 10px;
+label {
+	padding-bottom: 0;
+    padding-top: 7px;
+}
+
+.title {
+	color:#ec971f;
+	margin-left: 0px;
 }
