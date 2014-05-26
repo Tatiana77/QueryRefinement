@@ -94,10 +94,6 @@ public class HomeController {
 		IResponse response = new IResponse("OK");
 		try {
 
-			// Get NE and SW:
-			// int size = 2;
-			// double[] NE = new double[size];
-			// double[] SW = new double[size];
 			double[] i_q = new double[4];
 
 			i_q[0] = formBean.getnELat();
@@ -112,7 +108,7 @@ public class HomeController {
 			int size = 100000;
 			double w = 0.5;
 			double scale = 1.0;
-			int k = 20;
+			int k = 20; //retrieve k from the textbox
 
 			double[] iq_norm = Refinement.toNorm(i_q, d, 33.0952238976, 32.5414967546, -116.928885733, -117.281367428);
 
@@ -122,9 +118,8 @@ public class HomeController {
 
 			double[] rq_real = Refinement.toReal(r_q, d, 33.0952238976, 32.5414967546, -116.928885733, -117.281367428);
 			response.setR_q(rq_real);
-			logger.debug("Value of result query nE lat: ", r_q[0]);
-			response.setRefCardinality(77);
-			response.setDeviation(0.77);
+			response.setRefCardinality(77);// get this values from resutl.java
+			response.setDeviation(0.77); //same up
 
 		} catch (Exception e) {
 			logger.error("Error: " + e.getMessage(), e);
@@ -144,7 +139,7 @@ public class HomeController {
 		IResponse response = new IResponse("OK");
 		try {
 
-			Incident[] incidentArray = dbConnect.findIncidents(1000);
+			Incident[] incidentArray = dbConnect.findIncidents(100000);
 
 			if (incidentArray.length == 0) {
 				response.setStatus("ERROR");

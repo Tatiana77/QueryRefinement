@@ -30,7 +30,7 @@
 		<form:form id="refinement" method="post" modelAttribute="formBean" cssClass="cleanform" action="${pageContext.request.contextPath}/">
 			
 			<div class="container">
-				<div class='row'> dk fjdslfjkdsjf </div>
+				<div class='row'></div>
 				<div class='row'>    
 				<!-- First column, interface, logo -->
 				<div class="col-md-2">
@@ -54,32 +54,32 @@
 					<form:label path="nELat">
 		  				NE Latitude <form:errors path="nELat" cssClass="error" />
 					</form:label>
-					<form:input path="nELat" />
+					<form:input path="nELat" /><br>
 
 					<form:label path="nELng">
 		  				NE Longitude <form:errors path="nELng" cssClass="error" />
 					</form:label>
-					<form:input path="nELng" />
+					<form:input path="nELng" /><br>
 
 					<form:label path="sWLat">
 		  				SW Latitude <form:errors path="sWLat" cssClass="error" />
 					</form:label>
-					<form:input path="sWLat" />
+					<form:input path="sWLat" /><br>
 
 					<form:label path="sWLng">
 		  				SW Longitude <form:errors path="sWLng" cssClass="error" />
 					</form:label>
-					<form:input path="sWLng" />
+					<form:input path="sWLng" /><br>
 					
 					<form:label path="cardinality">
 		  				Cardinality <form:errors path="cardinality" cssClass="error" />
 					</form:label>
-					<form:input path="cardinality" />
+					<form:input path="cardinality" /><br>
 					
 					<form:label path="reqCardinality">
 		  				Required Cardinality <form:errors path="reqCardinality" cssClass="error" />
 					</form:label>
-					<form:input path="reqCardinality" />
+					<form:input path="reqCardinality" /><br>
 					
 					<form:label path="alpha">
 		  				Alpha <form:errors path="alpha" cssClass="error" />
@@ -90,7 +90,7 @@
                 		{
                     		document.getElementById("range").innerHTML=newValue;
                 		}
-            		</script>
+            		</script><br>
 					
 					<br></br>
 					<form:label path="scheme">
@@ -101,7 +101,7 @@
 						<form:option value="saqrcs">SAQR-CS</form:option>
 						<form:option value="hillClimbingHC">Hill Climbing HC</form:option>
 					</form:select>
-				</fieldset>
+				</fieldset><br>
 			</div>
 
 			<!-- Fourth column, interface, outputs -->
@@ -112,41 +112,41 @@
 					<form:label path="refNELat">
 		  				NE Latitude <form:errors path="refNELat" cssClass="error" />
 					</form:label>
-					<form:input path="refNELat" />
+					<form:input path="refNELat" /><br>
 
 					<form:label path="refNELng">
 		  				NE Longitude <form:errors path="refNELng" cssClass="error" />
 					</form:label>
-					<form:input path="refNELng" />
+					<form:input path="refNELng" /><br>
 
 					<form:label path="refSWLat">
 		  				SW Latitude <form:errors path="refSWLat" cssClass="error" />
 					</form:label>
-					<form:input path="refSWLat" />
+					<form:input path="refSWLat" /><br>
 
 					<form:label path="refSWLng">
 		  				SW Longitude <form:errors path="refSWLng" cssClass="error" />
 					</form:label>
-					<form:input path="refSWLng" />
+					<form:input path="refSWLng" /><br>
 					
 					<form:label path="refCardinality">
 		  				Cardinality <form:errors path="refCardinality" cssClass="error" />
 					</form:label>
-					<form:input path="refCardinality" />
+					<form:input path="refCardinality" /><br>
 					
 					<form:label path="deviation">
 		  				Deviation <form:errors path="deviation" cssClass="error" />
-					</form:label>
-					<form:input path="deviation" />
+					</form:label><br>
+					<form:input path="deviation" /><br>
 				
-				
+					<br>
 					<p>
 						<input type="submit" value="Calculate">
 					</p>
 					<div id="msg"></div>
 					<p>
 						<input id="clearMap" type="button" value="Clear Map">
-					</p>
+					</p><br>
 				
 				</fieldset>
 			</div>
@@ -305,24 +305,24 @@
 		}
 		
 		function drawRefinedRectangle(r_q){
-			var resultBounds = new google.maps.LatLngBounds(
-					new google.maps.LatLng(r_q[2] + 0.01, r_q[3] + 0.01),
-					new google.maps.LatLng(r_q[0], r_q[1]));
+					var resultBounds = new google.maps.LatLngBounds(
+							new google.maps.LatLng(r_q[2], r_q[3]),
+							new google.maps.LatLng(r_q[0] + 0.01, r_q[1] + 0.01));
 
-			var refinedRectangle = new google.maps.Rectangle(
-					{
-						bounds : resultBounds,
-						strokeColor : '#ED9121',
-						strokeOpacity : 0.8,
-						strokeWeight : 2,
-						fillColor : '#ED9121',
-						fillOpacity : 0.25,
-						clickable : false,
-						editable : false,
-						draggable : false
-					});
+					var refinedRectangle = new google.maps.Rectangle(
+							{
+								bounds : resultBounds,
+								strokeColor : '#ED9121',
+								strokeOpacity : 0.8,
+								strokeWeight : 2,
+								fillColor : '#ED9121',
+								fillOpacity : 0.25,
+								clickable : false,
+								editable : false,
+								draggable : false
+							});
 
-			refinedRectangle.setMap(window.map);
+					refinedRectangle.setMap(window.map);
 		}
 
 
