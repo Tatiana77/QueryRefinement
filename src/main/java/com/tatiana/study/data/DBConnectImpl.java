@@ -1,9 +1,11 @@
 package com.tatiana.study.data;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 
 import javax.sql.DataSource;
 
@@ -20,7 +22,8 @@ public class DBConnectImpl implements DBConnect {
 
 	public final DataSource datasource;
 
-	private static final Logger logger = LoggerFactory.getLogger(DBConnectImpl.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(DBConnectImpl.class);
 
 	@Autowired
 	public DBConnectImpl(final DataSource datasource) {
@@ -34,10 +37,12 @@ public class DBConnectImpl implements DBConnect {
 	}
 
 	@Override
-	public Bussines[] findBussines(final float nELat, final float nELng, final float sWLat, final float sWLng) {
+	public Bussines[] findBussines(final float nELat, final float nELng,
+			final float sWLat, final float sWLng) {
 		Statement stmt = null;
-		String query = "select * from bussines.bussines where latit <= " + nELat + " and latit >= " + sWLat
-				+ " and longit <= " + nELng + " and longit >= " + sWLng;
+		String query = "select * from bussines.bussines where latit <= "
+				+ nELat + " and latit >= " + sWLat + " and longit <= " + nELng
+				+ " and longit >= " + sWLng;
 		System.out.println("The query is: " + query);
 
 		try {
@@ -53,8 +58,9 @@ public class DBConnectImpl implements DBConnect {
 			int j = 0;
 			rs.beforeFirst();
 			while (rs.next()) {
-				Bussines c = new Bussines(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-						rs.getInt(5), rs.getInt(6), rs.getBigDecimal(7), rs.getBigDecimal(8));
+				Bussines c = new Bussines(rs.getString(1), rs.getString(2),
+						rs.getString(3), rs.getString(4), rs.getInt(5),
+						rs.getInt(6), rs.getBigDecimal(7), rs.getBigDecimal(8));
 				bussinesArray[j] = c;
 				j++;
 			}
@@ -67,16 +73,28 @@ public class DBConnectImpl implements DBConnect {
 	}
 
 	@Override
-	public Incident[] findIncidents(final float nELat, final float nELng, final float sWLat, final float sWLng) {
-		Statement stmt = null;
-		String query = "select * from bussines.incidents where lat <= " + nELat + " and lat >= " + sWLat
-				+ " and lon <= " + nELng + " and lon >= " + sWLng;
+	public Incident[] findIncidents(final float nELat, final float nELng,
+			final float sWLat, final float sWLng, final Date startDate,
+			final Date endDate) {
+		PreparedStatement  stmt = null;
+		String query = "select * from bussines.incidents where lat <= ? " 
+				+ " and lat >= ?  and lon <= ? " 
+				+ " and lon >= ?  "
+				+ " and incident_date >= ? "
+				+ " and incident_date <= ? ";
 		System.out.println("The query is: " + query);
 
 		try {
 			Connection conn = getConnection();
-			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
+			stmt = conn.prepareStatement(query);
+			stmt.setFloat(1, nELat);
+			stmt.setFloat(2, sWLat);
+			stmt.setFloat(3, nELng);
+			stmt.setFloat(4, sWLng);
+			stmt.setDate(5, new java.sql.Date(startDate.getTime()));
+			stmt.setDate(6, new java.sql.Date(endDate.getTime()));
+			
+			ResultSet rs = stmt.executeQuery();
 			// Obtains total number of records retrieved from the database |X|.
 			int i = 0;
 			while (rs.next()) {
@@ -86,7 +104,8 @@ public class DBConnectImpl implements DBConnect {
 			int j = 0;
 			rs.beforeFirst();
 			while (rs.next()) {
-				Incident c = new Incident(rs.getDate(1), rs.getBigDecimal(3), rs.getBigDecimal(2));
+				Incident c = new Incident(rs.getDate(1), rs.getBigDecimal(3),
+						rs.getBigDecimal(2));
 				incidentArray[j] = c;
 				j++;
 			}
@@ -99,14 +118,21 @@ public class DBConnectImpl implements DBConnect {
 	}
 
 	@Override
-	public Incident[] findIncidents(final int maxPoints) {
-		Statement stmt = null;
-		String query = "select * from bussines.incidents LIMIT 0," + maxPoints;
+	public Incident[] findIncidents(final int maxPoints, final Date startDate,
+			final Date endDate) {
+		PreparedStatement stmt = null;
+		String query = "select * from bussines.incidents LIMIT 0, ? ";
+//				+ " where incident_date >= ?"
+//				+ " and incident_date <= ?";
 		System.out.println("The query is: " + query);
 		try {
 			Connection conn = getConnection();
-			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
+			stmt = conn.prepareStatement(query);
+			stmt.setInt(1, maxPoints);
+//			stmt.setTimestamp(2, new java.sql.Timestamp(startDate.getTime()));
+//			stmt.setTimestamp(3, new java.sql.Timestamp(endDate.getTime()));
+
+			ResultSet rs = stmt.executeQuery();
 			// Obtains total number of records retrieved from the database |X|.
 			int i = 0;
 			while (rs.next()) {
@@ -116,7 +142,8 @@ public class DBConnectImpl implements DBConnect {
 			int j = 0;
 			rs.beforeFirst();
 			while (rs.next()) {
-				Incident c = new Incident(rs.getDate(1), rs.getBigDecimal(3), rs.getBigDecimal(2));
+				Incident c = new Incident(rs.getDate(1), rs.getBigDecimal(3),
+						rs.getBigDecimal(2));
 				incidentArray[j] = c;
 				j++;
 			}

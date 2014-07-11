@@ -100,27 +100,54 @@ public class HomeController {
 			i_q[1] = formBean.getnELng();
 			i_q[2] = formBean.getsWLat();
 			i_q[3] = formBean.getsWLng();
+	
+			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+			System.out.println(formBean);
+			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+			String sdate = formBean.getStartDate().toString();
+			String edate = formBean.getEndDate().toString();
+			System.out.println(sdate);
+			
+			System.out.println(i_q[0] + ", " + i_q[1] + ", " + i_q[2] + ", " + i_q[3]);
 
 			double[] r_q = new double[4];
 			int d = 4;
 			double[] dmaxs = { 1.0, 1.0, 1.0, 1.0 };
 			double[] dmins = { 0.0, 0.0, 0.0, 0.0 };
-			int size = 100000;
-			double w = 0.5;
+			int size = 1000;
+			double w = formBean.getAlpha();
+			System.out.println("Alpha:" + w);
 			double scale = 1.0;
-			int k = 20; //retrieve k from the textbox
+			int k = formBean.getCardinality();
+			System.out.println("Cardinality:" + k);
 
-			double[] iq_norm = Refinement.toNorm(i_q, d, 33.0952238976, 32.5414967546, -116.928885733, -117.281367428);
+			double[] iq_norm = Refinement.toNorm(i_q, d, i_q[0], i_q[2], i_q[1], i_q[3]);
 
 			// The refinement process
 			r_q = Refinement.SAQR_CSP_MDM(iq_norm, dmaxs, dmins, d, k, size, w, scale, query, true, true, true, 0.5,
 					0.125, 0);
 
-			double[] rq_real = Refinement.toReal(r_q, d, 33.0952238976, 32.5414967546, -116.928885733, -117.281367428);
+			double[] rq_real = Refinement.toReal(r_q, d, i_q[0], i_q[2], i_q[1], i_q[3]);
+			
+			
+			rq_real[0] = i_q[0] + 0.01;
+			rq_real[1] = i_q[1] + 0.01;
+			rq_real[2] = i_q[2];
+			rq_real[3] = i_q[3];
 			response.setR_q(rq_real);
+
 			response.setRefCardinality(77);// get this values from resutl.java
 			response.setDeviation(0.77); //same up
-
+			
+			String[] names = {"SAQR-CS","SAQR-S","HC"};
+		   
+            float[] costs ={0.03F, 0.45F, 0.67F};
+            float[] deviations = {0.09F, 0.103F, 0.5F};
+            
+			response.setNames(names);
+			response.setDeviations(deviations);
+			response.setCosts(costs);
+			response.setCardinality(100);
 		} catch (Exception e) {
 			logger.error("Error: " + e.getMessage(), e);
 			response = new IResponse("ERROR");
@@ -139,7 +166,7 @@ public class HomeController {
 		IResponse response = new IResponse("OK");
 		try {
 
-			Incident[] incidentArray = dbConnect.findIncidents(100000);
+			Incident[] incidentArray = dbConnect.findIncidents(1000, formBean.getStartDate(), formBean.getEndDate());
 
 			if (incidentArray.length == 0) {
 				response.setStatus("ERROR");

@@ -1,5 +1,13 @@
 package com.tatiana.study.web;
 
+import java.util.Date;
+
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.joda.time.DateTime;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.tatiana.study.controllers.CustomJsonDateDeserializer;
+
 public class MapMBean {
 
 	// Inputs
@@ -7,10 +15,18 @@ public class MapMBean {
 	private float nELng = 0;
 	private float sWLat = 0;
 	private float sWLng = 0;
-	private final int cardinality = 1;
-	private final int reqCardinality = 1;
+	private int cardinality = 1;
+	private int reqCardinality = 1;
 	private float alpha;
-	private final String scheme = "saqrcs";
+	private String scheme = "saqrcs";
+
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@JsonDeserialize(using = CustomJsonDateDeserializer.class)
+	private Date startDate = new DateTime(2007, 1, 1, 0, 0, 0).toDate();
+
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@JsonDeserialize(using = CustomJsonDateDeserializer.class)
+	private Date endDate = new DateTime(2012, 12, 31, 0, 0, 0).toDate();
 
 	// Outputs
 	private float refNELat = 0;
@@ -124,4 +140,33 @@ public class MapMBean {
 		this.deviation = deviation;
 	}
 
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	@Override
+	public String toString() {
+		return "MapMBean [nELat=" + nELat + ", nELng=" + nELng + ", sWLat="
+				+ sWLat + ", sWLng=" + sWLng + ", cardinality=" + cardinality
+				+ ", reqCardinality=" + reqCardinality + ", alpha=" + alpha
+				+ ", scheme=" + scheme + ", startDate=" + startDate
+				+ ", endDate=" + endDate + ", refNELat=" + refNELat
+				+ ", refNELng=" + refNELng + ", refSWLat=" + refSWLat
+				+ ", refSWLng=" + refSWLng + ", refCardinality="
+				+ refCardinality + ", deviation=" + deviation + "]";
+	}
+
+	
 }

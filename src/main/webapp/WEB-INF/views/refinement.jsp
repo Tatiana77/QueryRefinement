@@ -22,6 +22,9 @@
 		
 		<!--  Jquery library -->
 		<script type="text/javascript" src="<c:url value="/resources/jquery/1.10.2/jquery.js" />"></script>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+ 	 	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+ 		<script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 	
 	</head>
 
@@ -31,17 +34,10 @@
 			
 			<div class="container">
 				<div class='row'></div>
+				
 				<div class='row'>    
-				<!-- First column, interface, logo -->
-				<div class="col-md-2">
-					<span class="title">ORange</span><br/>
-					Objective aware<br/>
-					Range Query Refinement<br/><br/>
-					Dataset used: <br/>
-					San Diego, CA crime incidents.
-				</div>
 
-				<!-- Second column, interface, map container -->
+				<!-- First column, interface, map container -->
 				<div class="col-md-6" style="height: 320pt;" id="map">
 			
 				</div>
@@ -91,6 +87,16 @@
                     		document.getElementById("range").innerHTML=newValue;
                 		}
             		</script><br>
+            		
+            		<form:label path="startDate">
+		  				Start date <form:errors path="startDate" cssClass="error" />
+					</form:label>
+					<form:input path="startDate" /><br>
+					
+					<form:label path="endDate">
+		  				End date <form:errors path="endDate" cssClass="error" />
+					</form:label>
+					<form:input path="endDate" /><br>
 					
 					<br></br>
 					<form:label path="scheme">
@@ -150,6 +156,18 @@
 				
 				</fieldset>
 			</div>
+		<!-- Last column, vertical barcharts -->
+			<div class="col-md-2">
+				<div class='row'>
+					<div id="costGraphic">
+					</div>
+				</div>
+				<div class='row'>
+					<div id="deviationGraphic">
+					</div>
+				</div>
+			</div>
+			
 			</div>
 		</div>
 	</form:form>
@@ -295,19 +313,20 @@
 			}
 		}
 		
-		function drawOutValues(r_q, refCardinality, deviation){
-			$("#refNELat").val(r_q[2]);
-			$("#refNELng").val(r_q[3]);
-			$("#refSWLat").val(r_q[0]);
-			$("#refSWLng").val(r_q[1]);
+		function drawOutValues(r_q, refCardinality, deviation, cardinality){
+			$("#refNELat").val(r_q[0]);
+			$("#refNELng").val(r_q[1]);
+			$("#refSWLat").val(r_q[2]);
+			$("#refSWLng").val(r_q[3]);
 			$("#refCardinality").val(refCardinality);
 			$("#deviation").val(deviation);
+			$("#cardinality").val(cardinality);
 		}
 		
 		function drawRefinedRectangle(r_q){
 					var resultBounds = new google.maps.LatLngBounds(
 							new google.maps.LatLng(r_q[2], r_q[3]),
-							new google.maps.LatLng(r_q[0] + 0.01, r_q[1] + 0.01));
+							new google.maps.LatLng(r_q[0], r_q[1]));
 
 					var refinedRectangle = new google.maps.Rectangle(
 							{
@@ -328,6 +347,8 @@
 
 		$(document).ready(function() {
 			$("#msg").html("");
+			$( "#startDate" ).datepicker({ dateFormat: "dd/mm/yy" });
+			$( "#endDate" ).datepicker({ dateFormat: "dd/mm/yy" });
 
 			$("#clearMap").click(function() {
 				window.myData.mapExists = false;
@@ -357,8 +378,30 @@
 						var parsed = $.parseJSON(data);
 						var status = parsed.status;
 						if (status == "OK") {
-							drawOutValues(parsed.r_q, parsed.refCardinality, parsed.deviation);
+							drawOutValues(parsed.r_q, parsed.refCardinality, parsed.deviation, parsed.cardinality);
 							drawRefinedRectangle(parsed.r_q);
+							var costData = [];
+							var deviationData = [];
+							
+							var costData1 = {date: parsed.names[0], value:parsed.costs[0]};
+							var costData2 = {date: parsed.names[1], value:parsed.costs[1]};
+							var costData3 = {date: parsed.names[2], value:parsed.costs[2]};
+							
+							var devData1 = {date: parsed.names[0], value:parsed.deviations[0]};
+							var devData2 = {date: parsed.names[1], value:parsed.deviations[1]};
+							var devData3 = {date: parsed.names[2], value:parsed.deviations[2]};
+							
+							costData.push(costData1);
+							costData.push(costData2);
+							costData.push(costData3);
+							deviationData.push(devData1);
+							deviationData.push(devData2);
+							deviationData.push(devData3);
+							console.log($("#costGraphic").width());
+							$("#costGraphic").empty();
+							$("#deviationGraphic").empty();
+							plotGraph("#costGraphic", costData, $("#costGraphic").width(), 150, 'blue', 'Cost');
+							plotGraph("#deviationGraphic", deviationData,  $("#deviationGraphic").width(), 150, 'red', 'Deviation');
 				
 																	window.stop = true;
 																	$msg
@@ -424,5 +467,7 @@
 	<script type="text/javascript" src="<c:url value="/resources/d3.js" />"></script>
 	<script type="text/javascript"
 		src="<c:url value="/resources/diverVis.js" />"></script>
+		<script type="text/javascript"
+		src="<c:url value="/resources/plotGraph.js" />"></script>
 </body>
 </html>

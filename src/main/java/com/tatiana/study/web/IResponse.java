@@ -14,6 +14,11 @@ public class IResponse {
 	private String message;
 	private int refCardinality = 1;
 	private double deviation;
+	private String[] names = new String[3];
+	private float[] costs = { 0, 0, 0 };
+	private float[] deviations = { 0, 0, 0 };
+	private int cardinality;
+
 
 
 	public int getRefCardinality() {
@@ -91,4 +96,38 @@ public class IResponse {
 		errors.add(new Error(field, message));
 	}
 
+	public String[] getNames() {
+		return names;
+	}
+
+	public void setNames(String[] names) {
+		this.names = names;
+	}
+
+	public float[] getCosts() {
+		return costs;
+	}
+
+	public void setCosts(float[] costs) {
+		this.costs = costs;
+	}
+
+	public float[] getDeviations() {
+		return deviations;
+	}
+
+	public void setDeviations(float[] deviations) {
+		this.deviations = deviations;
+	}
+
+	public int getCardinality() {
+		return cardinality;
+	}
+
+	public void setCardinality(int cardinality) {
+		this.cardinality = cardinality;
+	}
+
+	
+	
 }
